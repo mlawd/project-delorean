@@ -15,6 +15,7 @@ const config = {
 firebase.initializeApp(config);
 
 interface User {
+  uid: string;
   email: string;
   displayName: string;
 }
