@@ -85,6 +85,13 @@ export default {
 
     replace({
       ENV: JSON.stringify({
+        ...Object.entries(process.env).reduce((acc, [key, value]) => {
+          if (/^APP_/.test(key)) {
+            acc[key] = value;
+          }
+
+          return acc;
+        }, {}),
         ...config().parsed,
       }),
     }),
