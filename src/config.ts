@@ -2,6 +2,7 @@
 const env: Record<string, string | undefined> = ENV;
 
 export const CONFIG = {
+  prod: env.prod,
   firebase: {
     apiKey: env.APP_FIREBASE_API_KEY,
     authDomain: env.APP_FIREBASE_AUTH_DOMAIN,

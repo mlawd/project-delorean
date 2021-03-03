@@ -92,6 +92,7 @@ export default {
 
           return acc;
         }, {}),
+        prod: !process.env.ROLLUP_WATCH,
         ...config().parsed,
       }),
     }),

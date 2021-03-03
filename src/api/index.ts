@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { get, writable } from "svelte/store";
+import { logEnd, logStart } from "../analytics";
 import { user } from "../auth";
 
 const db = firebase.firestore();
@@ -62,6 +63,7 @@ export async function startLog(start: number) {
       id: doc.id,
       start,
     });
+    logStart();
   }
 }
 
@@ -73,6 +75,7 @@ export async function stopLog(end: number) {
     });
 
     _currentLog.set(null);
+    logEnd();
   }
 }
 

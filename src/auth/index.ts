@@ -3,9 +3,9 @@ import "firebase/auth";
 import "firebase/analytics";
 import { get, writable } from "svelte/store";
 import { CONFIG } from "../config";
+import { logLogin, setUserId } from "../analytics";
 
 firebase.initializeApp(CONFIG.firebase);
-firebase.analytics();
 
 interface User {
   uid: string;
@@ -44,18 +44,8 @@ export async function googleAuth() {
   );
 
   _user.set(result.user);
-}
-
-export async function signup(email: string, password: string) {
-  var result = await auth.createUserWithEmailAndPassword(email, password);
-
-  _user.set(result.user);
-}
-
-export async function signin(email: string, password: string) {
-  var result = await auth.signInWithEmailAndPassword(email, password);
-
-  _user.set(result.user);
+  setUserId(result.user.uid);
+  logLogin(result.user.uid);
 }
 
 export async function logout() {
