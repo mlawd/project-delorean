@@ -21,8 +21,10 @@
   const logs = subscribeToWeekLogs();
 </script>
 
-<Button on:click={start} disabled={updating || $currentLog}>Start Log</Button>
-<Button on:click={stop} disabled={updating || !$currentLog}>End Log</Button>
+<div class="buttons">
+  <Button on:click={start} disabled={updating || $currentLog}>Start Log</Button>
+  <Button on:click={stop} disabled={updating || !$currentLog}>End Log</Button>
+</div>
 
 <h2>This Week</h2>
 <h3>Summary</h3>
@@ -43,5 +45,10 @@
 
   h2 {
     margin: 40px 0 20px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
   }
 </style>

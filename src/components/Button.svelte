@@ -10,10 +10,10 @@
     background-color: var(--primary);
     color: white;
     border-radius: 5px;
-    padding: 20px 50px;
+    padding: 15px 30px;
     border: none;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 15px;
 
     &:not([disabled]) {
       &:hover {
