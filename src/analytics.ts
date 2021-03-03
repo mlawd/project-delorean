@@ -1,8 +1,4 @@
-import firebase from "firebase/app";
-import "firebase/analytics";
-import { CONFIG } from "./config";
-
-const analytics = CONFIG.prod && firebase.analytics();
+import { analytics } from "./init";
 
 export function logLogin(uid: string) {
   logEvent("login", { uid });
@@ -19,11 +15,9 @@ export function logEnd() {
 }
 
 export function setUserId(id: string) {
-  if (analytics) analytics.setUserId(id);
+  analytics.setUserId(id);
 }
 
 export function logEvent(name: string, data?: Record<string, string>) {
-  if (analytics) {
-    analytics.logEvent(name, data);
-  }
+  analytics.logEvent(name, data);
 }

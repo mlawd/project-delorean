@@ -1,11 +1,6 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/analytics";
 import { get, writable } from "svelte/store";
-import { CONFIG } from "../config";
 import { logLogin, setUserId } from "../analytics";
-
-firebase.initializeApp(CONFIG.firebase);
+import { auth, GoogleAuthProvider } from "../init";
 
 interface User {
   uid: string;
@@ -13,8 +8,6 @@ interface User {
   displayName: string;
 }
 const _user = writable<User>(null);
-
-const auth = firebase.auth();
 
 const _loaded = writable(false);
 
@@ -39,9 +32,7 @@ export async function waitLoaded() {
 }
 
 export async function googleAuth() {
-  var result = await auth.signInWithPopup(
-    new firebase.auth.GoogleAuthProvider()
-  );
+  var result = await auth.signInWithPopup(new GoogleAuthProvider());
 
   _user.set(result.user);
   setUserId(result.user.uid);
