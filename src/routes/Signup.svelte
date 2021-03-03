@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from "../components/Button.svelte";
   import { signup, googleAuth, signin } from "../auth";
   import { replace } from "svelte-spa-router";
 
@@ -22,10 +23,12 @@
 </script>
 
 <main>
+  <!--
   <input type="text" placeholder="Email" bind:value={email} />
   <input type="password" placeholder="Password" bind:value={password} />
   <button on:click={submitSignup}>Signup</button>
   <button on:click={submitLogin}>Log in</button>
   <hr />
-  <button on:click={google}>Login with google</button>
+  -->
+  <Button on:click={google}>Login with google</Button>
 </main>

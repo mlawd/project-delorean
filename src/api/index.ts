@@ -5,38 +5,50 @@ import { user } from "../auth";
 
 const db = firebase.firestore();
 
-interface Log {
+export interface Log {
   id: string;
   start: number;
   end?: number;
-  diff?: number;
 }
 
 const _loading = writable(true);
-const _logs = writable<Log[]>([], set => {
+const _currentLog = writable<Log>(null);
+
+export function subscribeToWeekLogs() {
   const { uid } = get(user);
+  const logs = writable<Record<string, Log>>({});
+  const today = new Date();
+  const monday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - today.getDay() + 1
+  );
+
   db.collection("timelogs")
     .where("user_id", "==", uid)
-    .where("end", "!=", null)
-    .onSnapshot(snapshot => {
-      const docs: Log[] = [];
+    .where("start", ">=", monday.getTime())
+    .onSnapshot(data => {
+      data.docs.forEach(doc => {
+        var d = doc.data();
 
-      snapshot.forEach(doc => {
-        const data = doc.data();
+        logs.update(cur => {
+          cur[doc.id] = {
+            id: doc.id,
+            start: d.start,
+            end: d.end,
+          };
 
-        docs.push({
-          id: doc.id,
-          start: data.start,
-          end: data.end,
-          diff: data.diff,
+          if (!d.end) {
+            _currentLog.set(cur[doc.id]);
+          }
+
+          return cur;
         });
       });
-
-      set(docs);
     });
-});
 
-const _currentLog = writable<Log>(null);
+  return { subscribe: logs.subscribe };
+}
 
 export async function startLog(start: number) {
   if (!get(_currentLog)) {
@@ -56,18 +68,13 @@ export async function startLog(start: number) {
 export async function stopLog(end: number) {
   const log = get(_currentLog);
   if (!!log) {
-    await db
-      .collection("timelogs")
-      .doc(log.id)
-      .update({
-        end,
-        diff: end - log.start,
-      });
+    await db.collection("timelogs").doc(log.id).update({
+      end,
+    });
 
     _currentLog.set(null);
   }
 }
 
-export const logs = { subscribe: _logs.subscribe };
 export const loadingLogs = { subscribe: _loading.subscribe };
 export const currentLog = { subscribe: _currentLog.subscribe };

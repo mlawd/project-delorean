@@ -3,6 +3,7 @@
   import { routes } from "./routes";
   import { replace } from "svelte-spa-router";
   import { logout, loaded, user } from "./auth";
+  import LogoutIcon from "svelte-material-icons/Logout.svelte";
 
   function failed(evt: CustomEvent<{ route: string }>) {
     if (evt.detail.route === "/signup") return replace("/");
@@ -17,31 +18,44 @@
 </script>
 
 <main>
+  <h1>Time Logger</h1>
   {#if $loaded && $user}
-    <a href="#/">Home</a>
-    <a href="javascript:void(0)" on:click={doLogout}>Logout</a>
+    <button on:click={doLogout} title="Log out">
+      <LogoutIcon size="20px" color="white" />
+    </button>
   {/if}
   <Router {routes} on:conditionsFailed={failed} />
 </main>
 
-<style>
+<style lang="scss">
   main {
-    text-align: center;
     padding: 1em;
     max-width: 240px;
     margin: 0 auto;
   }
 
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
+  main {
+    max-width: 100%;
   }
 
   @media (min-width: 640px) {
     main {
-      max-width: none;
+      max-width: 640px;
+    }
+  }
+
+  button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--primary);
+
+    &:hover {
+      cursor: pointer;
     }
   }
 </style>

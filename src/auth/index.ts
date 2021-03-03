@@ -1,18 +1,11 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/analytics";
 import { get, writable } from "svelte/store";
+import { CONFIG } from "../config";
 
-const config = {
-  apiKey: "AIzaSyBRev6BBJ0nyIPvJTh60m8nHJpG1DvKEBM",
-  authDomain: "project-delorean-59706.firebaseapp.com",
-  projectId: "project-delorean-59706",
-  storageBucket: "project-delorean-59706.appspot.com",
-  messagingSenderId: "557934398821",
-  appId: "1:557934398821:web:028fe8104191d3566d658c",
-  measurementId: "G-6EB7NVFWCQ",
-};
-
-firebase.initializeApp(config);
+firebase.initializeApp(CONFIG.firebase);
+firebase.analytics();
 
 interface User {
   uid: string;
